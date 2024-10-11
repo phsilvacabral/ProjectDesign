@@ -43,6 +43,10 @@ public class Administrador extends Usuario {
 
     //Método do Administrador para criar Usuario
     public void criarNovoUsuario(Scanner scanner, List<Usuario> usuarios) throws LoginException {
+        VerificadorAdapter cpfAdapter = new CPFAdapter();
+        VerificadorAdapter emailAdapter = new EmailAdapter();
+        VerificadorAdapter telefoneAdapter = new TelefoneAdapter();
+
         // Encontrar o menor ID livre
         int id = 1;
         List<Integer> idsExistentes = new ArrayList<>();
@@ -62,7 +66,7 @@ public class Administrador extends Usuario {
         }
         System.out.print("Digite o CPF do novo usuário: ");
         String cpf = scanner.nextLine();
-        while(!Verificador.verificarCPF(usuarios, cpf)) {
+        while(!cpfAdapter.verificar(usuarios, cpf)) {
             System.out.print("CPF inválido! Por favor, digite novamente: ");
             cpf = scanner.nextLine();
         }
@@ -72,7 +76,7 @@ public class Administrador extends Usuario {
 
         System.out.print("Digite o email do novo usuário: ");
         String email = scanner.nextLine();
-        while(!Verificador.verificarEmail(usuarios, email)) {
+        while(!emailAdapter.verificar(usuarios, email)) {
             System.out.print("Email inválido ou em uso! Por favor, digite novamente: ");
             email = scanner.nextLine();
         }
@@ -86,7 +90,7 @@ public class Administrador extends Usuario {
 
         System.out.print("Digite o telefone do novo usuário com DDD sem o zero: ");
         String telefone = scanner.nextLine();
-        while(!Verificador.verificarTelefone(telefone)) {
+        while(!telefoneAdapter.verificar(usuarios, telefone)) {
             System.out.print("Telefone inválido! Por favor, digite novamente: ");
             telefone = scanner.nextLine();
         }
@@ -121,9 +125,15 @@ public class Administrador extends Usuario {
     }
 
     public void editarUsuario(Scanner scanner, List<Usuario> usuarios) throws LoginException {
+        VerificadorAdapter cpfAdapter = new CPFAdapter();
+        VerificadorAdapter emailAdapter = new EmailAdapter();
+        VerificadorAdapter telefoneAdapter = new TelefoneAdapter();
+        List<Usuario> gambiarra = new ArrayList<>();
+
+
         System.out.print("Infome o CPF do Usuário: ");
         String cpf = scanner.nextLine();
-        while(!Verificador.verificaCPF(cpf)) {
+        while(!cpfAdapter.verificar(gambiarra, cpf)) {
             System.out.print("CPF inválido! Por favor, digite novamente: ");
             cpf = scanner.nextLine();
         }
@@ -158,7 +168,7 @@ public class Administrador extends Usuario {
                 cpf_ = cpfAtual;
                 usuarioEncontrado.setCpf(cpf_);
             } else {
-                while(!Verificador.verificarCPF(usuarios, cpf_)) {
+                while(!cpfAdapter.verificar(usuarios, cpf_)) {
                     System.out.print("CPF inválido! Por favor, digite novamente: ");
                     cpf_ = scanner.nextLine();
                 }
@@ -177,7 +187,7 @@ public class Administrador extends Usuario {
                 email = emailAtual;
                 usuarioEncontrado.setEmail(email);
             } else {
-                while(!Verificador.verificarEmail(usuarios, email)) {
+                while(!emailAdapter.verificar(usuarios, email)) {
                     System.out.print("Email inválido ou em uso! Por favor, digite novamente: ");
                     email = scanner.nextLine();
                 }
@@ -201,7 +211,7 @@ public class Administrador extends Usuario {
                 telefone = telefoneAtual;
                 usuarioEncontrado.setTelefone(telefone);
             } else {
-                while(!Verificador.verificarTelefone(telefone)) {
+                while(!telefoneAdapter.verificar(usuarios, telefone)) {
                     System.out.print("Telefone inválido! Por favor, digite novamente: ");
                     telefone = scanner.nextLine();
                 }
@@ -229,9 +239,11 @@ public class Administrador extends Usuario {
     }
 
     public void deletarUsuario (Scanner scanner, List<Usuario> usuarios, Usuario usuarioLogado) throws LoginException {
+        VerificadorAdapter cpfAdapter = new CPFAdapter();
+        List<Usuario> gambiarra = new ArrayList<>();
         System.out.print("Infome o CPF do Usuário: ");
         String cpf = scanner.nextLine();
-        while(!Verificador.verificaCPF(cpf)) {
+        while(!cpfAdapter.verificar(gambiarra, cpf)) {
             System.out.print("CPF inválido! Por favor, digite novamente: ");
             cpf = scanner.nextLine();
         }
