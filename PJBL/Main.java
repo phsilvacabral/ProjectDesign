@@ -76,8 +76,13 @@ public class Main {
         List<Veiculo> carros = new ArrayList<>();
         List<Veiculo> avioes = new ArrayList<>();
         List<Veiculo> embarcacoes = new ArrayList<>();
-
         List<String> produtos = ProdutoDBsingleton.getInstance().carregarProdutos();
+        Subject subject = new Subject();
+        for (Usuario usuario : usuarios) {
+            if (usuario instanceof Administrador) {
+                subject.adicionarObservador((Administrador) usuario);
+            }
+        }
 
         while (true) {
             try {
@@ -98,13 +103,13 @@ public class Main {
 
                     if (escolha == 1) {
                         System.out.println("-- Cadastro de Usuário --");
-                        admin.criarNovoUsuario(scanner, usuarios);
+                        admin.criarNovoUsuario(scanner, usuarios, subject);
                     } else if (escolha == 2) {
                         System.out.println("-- Edição de Usuário --");
                         admin.editarUsuario(scanner, usuarios);
                     } else if (escolha == 3) {
                         System.out.println("-- Exclusão de Usuário --");
-                        admin.deletarUsuario(scanner, usuarios, usuarioLogado);
+                        admin.deletarUsuario(scanner, usuarios, usuarioLogado, subject);
                     } else if (escolha == 4) {
                         System.out.println("-- Listagem de Usuários --");
                         admin.listarUsuarios(usuarios);

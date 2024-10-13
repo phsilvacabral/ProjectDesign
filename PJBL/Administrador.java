@@ -3,10 +3,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Administrador extends Usuario {
+public class Administrador extends Usuario implements Observer{
     public Administrador(int idUsuario, String nome, String cpf, String email, String senha, String telefone,
                          String endereco) {
         super(idUsuario, nome, "Administrador", cpf, email, senha, telefone, endereco);
+    }
+
+    @Override
+    public void notificar(String mensagem) {
+        System.out.println("Notificação para Administrador " + this.getNome() + ": " + mensagem);
     }
 
     @Override
@@ -42,7 +47,7 @@ public class Administrador extends Usuario {
     }
 
     //Método do Administrador para criar Usuario
-    public void criarNovoUsuario(Scanner scanner, List<Usuario> usuarios) throws LoginException {
+    public void criarNovoUsuario(Scanner scanner, List<Usuario> usuarios, Subject subject) throws LoginException {
         VerificadorAdapter cpfAdapter = new CPFAdapter();
         VerificadorAdapter emailAdapter = new EmailAdapter();
         VerificadorAdapter telefoneAdapter = new TelefoneAdapter();
@@ -115,12 +120,14 @@ public class Administrador extends Usuario {
         Usuario novoUsuario;
         if (tipo.equalsIgnoreCase("A")) {
             novoUsuario = new Administrador(id, nome, cpfFormatted, email, senha, telefoneFormatted, endereco);
+            subject.adicionarObservador((Administrador) novoUsuario);
         } else {
             novoUsuario = new Funcionario(id, nome, cpfFormatted, email, senha, telefoneFormatted, endereco);
         }
 
         usuarios.add(novoUsuario);
         SistemaDeLogin.salvarUsuario(novoUsuario);
+        subject.notificarTodos("Novo usuário criado: " + nome);
         System.out.println("Novo usuário criado com sucesso.");
     }
 
@@ -238,7 +245,8 @@ public class Administrador extends Usuario {
         }
     }
 
-    public void deletarUsuario (Scanner scanner, List<Usuario> usuarios, Usuario usuarioLogado) throws LoginException {
+    public void deletarUsuario (Scanner scanner, List<Usuario> usuarios, Usuario usuarioLogado, Subject subject)
+            throws LoginException {
         VerificadorAdapter cpfAdapter = new CPFAdapter();
         List<Usuario> gambiarra = new ArrayList<>();
         System.out.print("Infome o CPF do Usuário: ");
@@ -278,6 +286,10 @@ public class Administrador extends Usuario {
 
             SistemaDeLogin.removerUsuario(cpfFormatted);
             usuarios.remove(usuarioEncontrado);
+            if (usuarioEncontrado instanceof Administrador) {
+                subject.removerObservador((Administrador) usuarioEncontrado);
+            }
+            subject.notificarTodos("Usuário " + usuarioEncontrado.getNome() + " foi excluído.");
             System.out.println("Usuário removido com sucesso.");
         } else {
             System.out.println("Usuário não encontrado.");
