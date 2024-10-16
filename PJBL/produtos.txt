@@ -1,1 +1,0 @@
-1,Carro,tesla,m3,2020,5000,branco,4,30000.0,5,4,simples,4,4,2000,v8,500,gasosa,manual
