@@ -25,12 +25,6 @@ public abstract class Usuario {
     private static int proximoCodigoAviao = 1;
     private static int proximoCodigoEmbarcacao = 1;
 
-    private PagamentoStrategy estrategiaPagamento;
-
-    public void setEstrategiaPagamento(PagamentoStrategy estrategiaPagamento) {
-        this.estrategiaPagamento = estrategiaPagamento;
-    }
-
     public Usuario(int idUsuario, String nome, String tipo, String cpf, String email, String senha, String telefone,
                    String endereco) {
         this.idUsuario = idUsuario;
@@ -633,7 +627,7 @@ public abstract class Usuario {
 
         int formaPagamento = Integer.parseInt(scanner.nextLine());
 
-        PagamentoStrategy estrategiaPagamento = null;
+        PagamentoStrategy estrategiaPagamento;
 
         switch (formaPagamento) {
             case 1:
