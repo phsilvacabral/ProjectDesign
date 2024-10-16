@@ -6,6 +6,7 @@ import PJBL.Produtos.Embarcacao;
 import PJBL.Produtos.Veiculo;
 import PJBL.Sistemas.LoginException;
 import PJBL.Sistemas.SistemaProduto;
+import PJBL.Strategy.*;
 
 import java.util.*;
 
@@ -23,6 +24,12 @@ public abstract class Usuario {
     private static int proximoCodigoCarro = 1;
     private static int proximoCodigoAviao = 1;
     private static int proximoCodigoEmbarcacao = 1;
+
+    private PagamentoStrategy estrategiaPagamento;
+
+    public void setEstrategiaPagamento(PagamentoStrategy estrategiaPagamento) {
+        this.estrategiaPagamento = estrategiaPagamento;
+    }
 
     public Usuario(int idUsuario, String nome, String tipo, String cpf, String email, String senha, String telefone,
                    String endereco) {
@@ -610,6 +617,43 @@ public abstract class Usuario {
                     String.valueOf(preco), String.valueOf(quantidade), tipoPropulsao);
             SistemaProduto.cadastrar(text);
         }
+    }
+
+    public void comprarProduto(Scanner scanner) {
+        System.out.println("-- Realizar Pagamento --");
+
+        System.out.print("Informe o valor da compra: R$");
+        double valorCompra = Double.parseDouble(scanner.nextLine());
+
+        System.out.println("Escolha a forma de pagamento:");
+        System.out.println("1. Cartão de Crédito");
+        System.out.println("2. Cartão de Débito");
+        System.out.println("3. Dinheiro");
+        System.out.println("4. Pix");
+
+        int formaPagamento = Integer.parseInt(scanner.nextLine());
+
+        PagamentoStrategy estrategiaPagamento = null;
+
+        switch (formaPagamento) {
+            case 1:
+                estrategiaPagamento = new PagamentoCartaoCredito();
+                break;
+            case 2:
+                estrategiaPagamento = new PagamentoCartaoDebito();
+                break;
+            case 3:
+                estrategiaPagamento = new PagamentoDinheiro();
+                break;
+            case 4:
+                estrategiaPagamento = new PagamentoPix();
+                break;
+            default:
+                System.out.println("Opção inválida! Pagamento cancelado.");
+                return;
+        }
+
+        estrategiaPagamento.pagar(valorCompra);
     }
 
 

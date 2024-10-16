@@ -5,6 +5,7 @@ import PJBL.Observer.Subject;
 import PJBL.Produtos.Veiculo;
 import PJBL.Singleton.ProdutoDBsingleton;
 import PJBL.Sistemas.LoginException;
+import PJBL.Strategy.*;
 import PJBL.Usuarios.Administrador;
 import PJBL.Usuarios.Funcionario;
 import PJBL.Usuarios.Usuario;
@@ -103,6 +104,7 @@ public class Main {
                     System.out.println("6. Carregar Produtos");
                     System.out.println("7. Editar Produtos");
                     System.out.println("8. Excluir Produtos");
+                    System.out.println("9. Realizar Pagamento");
                     System.out.println("0. Sair");
                     System.out.print("--> ");
 
@@ -148,6 +150,8 @@ public class Main {
                         ProdutoDBsingleton.getInstance().editarProduto(scanner, produtos);
                     } else if (escolha == 8) {
                         ProdutoDBsingleton.getInstance().excluirProduto(scanner, produtos);
+                    } else if (escolha == 9) {
+                        admin.comprarProduto(scanner);
                     } else if (escolha == 0) {
                         break;
                     } else {
@@ -160,6 +164,7 @@ public class Main {
                     System.out.println("3. Editar Produtos");
                     System.out.println("4. Excluir Produtos");
                     System.out.println("5. Listar Funcionarios");
+                    System.out.println("6. Realizar Pagamento");
                     System.out.println("0. Sair");
                     System.out.print("--> ");
 
@@ -196,6 +201,8 @@ public class Main {
                     } else if (escolha == 5) {
                         System.out.println("-- Listagem de Funcionários --");
                         funcio.listarUsuarios(usuarios);
+                    } else if (escolha == 6) {
+                        funcio.comprarProduto(scanner);
                     } else if (escolha == 0) {
                         break;
                     } else {
